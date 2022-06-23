@@ -6,149 +6,111 @@ struct Node
     Node *left;
     Node *right;
 };
-Node *CreateNode(int init)
+Node *create(int item)
 {
-    Node *p = new Node;
-    p->data = init;
-    p->left = NULL;
-    p->right = NULL;
-    return p;
+    Node *node = new Node;
+    node->data = item;
+    node->left = node->right = NULL;
+    return node;
 }
-typedef Node *Tree;
-Tree myTree;
-void CreateTree(Tree &root)
+/*Inorder traversal of the tree formed*/
+void inorder(Node *root)
 {
-    root = NULL;
+    if (root == NULL)
+        return;
+    inorder(root->left);         // traverse left subtree
+    cout << root->data << "   "; // traverse root node
+    inorder(root->right);        // traverse right subtree
 }
-void NLR(Tree root)
+Node *findMinimum(Node *cur) /*To find the inorder successor*/
 {
-    if (root)
+    while (cur->left != NULL)
     {
-        cout << root->data << " ";
-        NLR(root->left);
-        NLR(root->right);
+        cur = cur->left;
+    }
+    return cur;
+}
+Node *insertion(Node *root, int item) /*Insert a node*/
+{
+    if (root == NULL)
+        return create(item); /*return new node if tree is empty*/
+    if (item < root->data)
+        root->left = insertion(root->left, item);
+    else
+        root->right = insertion(root->right, item);
+    return root;
+}
+void search(Node *&cur, int item, Node *&parent)
+{
+    while (cur != NULL && cur->data != item)
+    {
+        parent = cur;
+        if (item < cur->data)
+            cur = cur->left;
+        else
+            cur = cur->right;
     }
 }
-void LNR(Tree root)
+void deletion(Node *&root, int item) /*function to delete a node*/
 {
-    if (root)
+    Node *parent = NULL;
+    Node *cur = root;
+    search(cur, item, parent); /*find the node to be deleted*/
+    if (cur == NULL)
+        return;
+    if (cur->left == NULL && cur->right == NULL) /*When node has no children*/
     {
-        LNR(root->left);
-        cout << root->data << " ";
-        LNR(root->right);
-    }
-}
-void LRN(Tree root)
-{
-    if (root)
-    {
-        LRN(root->left);
-        LRN(root->right);
-        cout << root->data << " ";
-    }
-}
-void DestroyTree(Tree &root)
-{
-    if (root)
-    {
-        DestroyTree(root->left);
-        DestroyTree(root->right);
-        delete root;
-    }
-}
-void AddNode(Tree &root, Node *node)
-{
-    if (root)
-    {
-        if (node->data == root->data)
+        if (cur != root)
         {
-            return;
-        }
-        if (node->data < root->data)
-        {
-            AddNode(root->left, node);
+            if (parent->left == cur)
+                parent->left = NULL;
+            else
+                parent->right = NULL;
         }
         else
-        {
-            AddNode(root->right, node);
-        }
+            root = NULL;
+        free(cur);
+    }
+    else if (cur->left && cur->right)
+    {
+        Node *succ = findMinimum(cur->right);
+        int val = succ->data;
+        deletion(root, succ->data);
+        cur->data = val;
     }
     else
     {
-        root = node;
-    }
-}
-Node *FindNode(Tree root, int x)
-{
-    if (root)
-    {
-        if (root->data==x) {
-            return root;
-        }
-        else if (x<root->data){
-            return FindNode(root->left,x);
-        }
-        return FindNode(root->right,x);
-    }
-    return NULL;
-}
-// node p need to exchange, tree (right tree)
-void FindAndReplace1(Tree &p, Tree &tree)
-{
-    if (tree->left)                     // chưa phải nhỏ nhất (trái nhất)
-        FindAndReplace1(p, tree->left); // tiếp tục tìm
-    else                                // tree là nút trái nhất
-    {
-        p->data = tree->data; // copy data
-        p = tree;             // trỏ nút p vào nút tree sẽ làm thế mạng bị xóa
-        tree = tree->right;   // nút trái không còn tuy nhiên nút phải có thể còn nên ta phải nối chúng lại
-    }
-}
-// nút p là nút cần thay thế, tree là cây đang xét (cây bên trái)
-void FindAndReplace2(Tree &p, Tree &tree)
-{
-    if (tree->right)                     // chưa phải lớn nhất (phải nhất)
-        FindAndReplace2(p, tree->right); // tiếp tục tìm
-    else                                 // tree là nút trái nhất
-    {
-        p->data = tree->data; // copy data
-        p = tree;             // trỏ nút p vào nút tree sẽ làm thế mạng bị xóa
-        tree = tree->left;    // nút phải không còn tuy nhiên nút trái có thể còn nên ta phải nối chúng lại
-    }
-}
-void DeleteNode(Tree &root, int x)
-{
-    if (root)
-    {
-        if (x > root->data)
-            DeleteNode(root->right, x);
-        else if (x < root->data)
-            DeleteNode(root->left, x);
-        else // nút hiện tại (root) là nút cần xóa
+        Node *child = (cur->left) ? cur->left : cur->right;
+        if (cur != root)
         {
-            Node *p = root; // lưu lại nút cần xóa tránh bị ghi đè
-            if (!root->left)
-                root = root->right; // trường hợp 1
-            else if (!root->right)
-                root = root->left; // trường hợp 2
+            if (cur == parent->left)
+                parent->left = child;
             else
-                FindAndReplace1(p, root->right); // cách 1
-            // FindAndReplace2(p, root->left); // cách 2
-            delete p; // xóa nút
+                parent->right = child;
         }
-    }
-    else
-    {
-        cout << "Not found!\n"; // Không tìm thấy phần tử cần xóa
+        else
+            root = child;
+        free(cur);
     }
 }
 int main()
 {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    Tree tree;
-    CreateTree(tree);
-    NLR(tree);
+    Node *root = NULL;
+    root = insertion(root, 45);
+    root = insertion(root, 30);
+    root = insertion(root, 50);
+    root = insertion(root, 25);
+    root = insertion(root, 35);
+    root = insertion(root, 45);
+    root = insertion(root, 60);
+    root = insertion(root, 4);
+    printf("The inorder traversal of the given binary tree is - \n");
+    inorder(root);
+    deletion(root, 25);
+    printf("\nAfter deleting node 25, the inorder traversal of the given binary tree is - \n");
+    inorder(root);
+    insertion(root, 2);
+    printf("\nAfter inserting node 2, the inorder traversal of the given binary tree is - \n");
+    inorder(root);
     return 0;
 }
