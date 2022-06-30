@@ -106,22 +106,25 @@ Company* Search(Company* hash_table, string company_name){
 	return &hash_table[hval];
 }
 int main(){
-	Company* pC  = createHashTable(readCompanyList("MST.txt"));
 	
-	for(int i = 0; i < 2000; i++){
-		if(pC[i].name != ""){
-			cout << i << "  " << pC[i].name << endl;
-		}
-	}
-	
-	//Company myC{"ABC", "123456", "Khongco"};
-	//Insert(pC, myC);
-	//cout << Search(pC, "ABC")->profit_tax;
-	/*
 	vector<Company> vC = readCompanyList("MST.txt");
-	for(int i = 0; i < vC.size(); i++){
-		cout << vC[i].name << endl;
-	}
-	*/
+	// for(int i = 0; i < vC.size(); i++){
+	// 	cout << vC[i].name << endl;
+	// }
+	Company *pC = createHashTable(vC);
+
+	// for (int i = 0; i < 2000; i++)
+	// {
+	// 	if (pC[i].name != "")
+	// 	{
+	// 		cout << i << "  " << pC[i].name << endl;
+	// 	}
+	// }
+
+	//cout << hashString("CONG TY TNHH BEE VIET NAM");
+
+	Company myC{"ABC", "123456", "Khongco"};
+	Insert(pC, myC);
+	cout << Search(pC, "ABC")->profit_tax;
 	return 0;
 }
