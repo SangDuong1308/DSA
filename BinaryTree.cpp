@@ -152,6 +152,44 @@ void remove(NODE *&pRoot, int x)
     }
 }
 
+void removeNode(NODE *&pRoot, int x)
+{
+    if (pRoot == NULL) return;
+    if (pRoot->key > x) removeNode(pRoot->left,x);
+    if (pRoot->key <x) removeNode(pRoot->right,x);
+    if (pRoot->key == x)
+    {
+        if (pRoot->left == NULL && pRoot->right == NULL)
+        {
+            delete pRoot;
+            pRoot = NULL;
+        }
+        else if (pRoot->left == NULL && pRoot->right!=NULL)
+        {
+            NODE* p = pRoot;
+            pRoot = pRoot->right;
+            delete pRoot;
+        }
+        else if (pRoot->left != NULL && pRoot->right == NULL)
+        {
+            NODE* p = pRoot;
+            pRoot = pRoot ->left;
+            delete pRoot;
+        }
+        else if (pRoot->left!=NULL && pRoot->right!=NULL)
+        {
+            NODE* p = pRoot->left;
+            while (p->right!=NULL)
+            {
+                p = p->right;
+            }
+            pRoot->key = p->key;
+            removeNode(pRoot->left,p->key);
+        }
+    }
+
+}
+
 void removeTree(NODE *&pRoot)
 {
     if (pRoot != NULL)
@@ -198,18 +236,19 @@ int main()
     // LNR(pRoot);
     // NLR(pRoot);
     // cout << endl;
-    levelOrder(pRoot);
-    LRN(pRoot);
+    //levelOrder(pRoot);
+    //LRN(pRoot);
     // cout << endl;
     // cout << Height(pRoot) << endl;
-    // cout << countNode(pRoot) << endl;
-    // cout << sumNode(pRoot) << endl;
-    // NODE* temp = search(pRoot, 2);
+    //cout << countNode(pRoot) << endl;
+    //cout << sumNode(pRoot) << endl;
+    NODE* temp = search(pRoot, 4);
+    cout<<Level(pRoot,temp);
     // cout << temp->key;
     // remove(pRoot, 2);
     // LNR(pRoot);
     // removeTree(pRoot);
     // if (pRoot == NULL)
     // cout << "Removed";
-    system("pause");
+    // system("pause");
 }
