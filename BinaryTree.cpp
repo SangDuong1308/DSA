@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits.h>
 #include <queue>
+#include <math.h>
 using namespace std;
 struct NODE
 {
@@ -203,19 +204,20 @@ int countLeaf(NODE *pRoot)
         return countLeaf(pRoot->left) + countLeaf(pRoot->right);
 }
 
-int countLess(NODE* pRoot, int x)
+int countLess(NODE *pRoot, int x)
 {
     int count = 0;
-    if (pRoot == NULL) return 0;
+    if (pRoot == NULL)
+        return 0;
     else if (pRoot->key < x)
     {
         count++;
-        count += countLess(pRoot->left,x);
+        count += countLess(pRoot->left, x);
         count += countLess(pRoot->right, x);
     }
-    else 
+    else
     {
-        count+=countLess(pRoot->left,x);
+        count += countLess(pRoot->left, x);
     }
     return count;
 }
@@ -238,34 +240,57 @@ int countGreater(NODE *pRoot, int x)
     return count;
 }
 
-int isBSTUtil(NODE* pRoot, int min, int max);
+int isBSTUtil(NODE *pRoot, int min, int max);
 
-int isBST(NODE* pRoot)
+int isBST(NODE *pRoot)
 {
     return (isBSTUtil(pRoot, INT_MIN, INT_MAX));
 }
 
 int isBSTUtil(NODE *pRoot, int min, int max)
 {
-    if (pRoot==NULL) return 1;
-    if (pRoot->key < min || pRoot->key>max) return 0;
-    return (isBSTUtil(pRoot->left,min,pRoot->key-1) && isBSTUtil(pRoot->right,pRoot->key+1,max));
+    if (pRoot == NULL)
+        return 1;
+    if (pRoot->key < min || pRoot->key > max)
+        return 0;
+    return (isBSTUtil(pRoot->left, min, pRoot->key - 1) && isBSTUtil(pRoot->right, pRoot->key + 1, max));
 }
 
-bool isFullBST(NODE* pRoot)
+bool isFullBST(NODE *pRoot)
 {
-    if (pRoot == NULL) return true;
-    if (pRoot->left == NULL && pRoot->right == NULL) return true;
-    if  ((pRoot->left) && (pRoot->right)){
+    if (pRoot == NULL)
+        return true;
+    if (pRoot->left == NULL && pRoot->right == NULL)
+        return true;
+    if ((pRoot->left) && (pRoot->right))
+    {
         return (isFullBST(pRoot->left) && isFullBST(pRoot->right));
-    } 
+    }
     return false;
+}
+
+int height(NODE *pRoot)
+{
+    if (pRoot == NULL)
+        return 0;
+    return 1 + max(height(pRoot->left), height(pRoot->right));
+}
+
+bool isAVL(NODE *pRoot)
+{
+    if (pRoot == NULL)
+        return 1;
+    if (abs(height(pRoot->left) - height(pRoot->right)) <= 1 && (isAVL(pRoot->left)) && (isAVL(pRoot->right)))
+    {
+        return 1;
+    }
+    return 0;
 }
 
 int main()
 {
-    int a[] = {4, 7, 8, 2, 6};
-    NODE *pRoot = createTree(a, 5);
+    // int a[] = {4, 7, 8, 2, 6};
+    // NODE *pRoot = createTree(a, 5);
     // LNR(pRoot);
     // NLR(pRoot);
     // cout << endl;
@@ -284,6 +309,18 @@ int main()
     // if (pRoot == NULL)
     //     cout << "Removed";
     // cout << countLeaf(pRoot);
-    //cout << countGreater(pRoot, 8);
-    cout << isFullBST(pRoot);
+    // cout << countGreater(pRoot, 8);
+    // cout << isFullBST(pRoot);
+    // cout<<isAVL(pRoot);
+    NODE *pRoot = createNode(7);
+    pRoot->left = createNode(6);
+    pRoot->right = createNode(12);
+    pRoot->left->left = createNode(4);
+    pRoot->left->right = createNode(5);
+    pRoot->right->right = createNode(13);
+    pRoot->right->right->right=createNode(26);
+    if (isAVL(pRoot))
+        cout << "The Tree is AVL Tree" << endl;
+    else
+        cout << "The Tree is not AVL Tree " << endl;
 }
