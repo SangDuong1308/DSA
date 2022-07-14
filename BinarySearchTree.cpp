@@ -4,7 +4,7 @@ struct Node
 {
     int data;
     Node *left;
-    Node *right;
+    Node *right; 
 };
 Node *create(int item)
 {
