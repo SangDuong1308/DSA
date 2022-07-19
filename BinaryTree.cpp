@@ -103,6 +103,15 @@ int sumNode(NODE *pRoot)
         return pRoot->key + sumNode(pRoot->left) + sumNode(pRoot->right);
 }
 
+/**
+ * If the root is null, return null. If the key is found, return the root. Otherwise, if the key is
+ * less than the root, search the left subtree. Otherwise, search the right subtree
+ * 
+ * @param pRoot The root of the tree.
+ * @param x the value to be searched
+ * 
+ * @return The node that contains the key x.
+ */
 NODE *search(NODE *pRoot, int x)
 {
     if (pRoot == NULL)
@@ -115,6 +124,20 @@ NODE *search(NODE *pRoot, int x)
         return search(pRoot->right, x);
 }
 
+/**
+ * If the root is not null, and the root's key is greater than the key to be removed, then remove the
+ * key from the left subtree. Otherwise, remove the key from the right subtree. If the root's key is
+ * equal to the key to be removed, then if the root has no children, delete the root. Otherwise, if the
+ * root has only a right child, then delete the root and replace it with its right child. Otherwise, if
+ * the root has only a left child, then delete the root and replace it with its left child. Otherwise,
+ * if the root has two children, then replace the root's key with the largest key in the left subtree,
+ * and remove that key from the left subtree
+ * 
+ * @param pRoot the root of the tree
+ * @param x the value to be removed
+ * 
+ * @return the value of the node that is being removed.
+ */
 void remove(NODE *&pRoot, int x)
 {
     if (pRoot == NULL)

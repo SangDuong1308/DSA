@@ -8,12 +8,26 @@ public:
     Node *right;
     int height;
 };
+/**
+ * If the node is null, return 0. Otherwise, return the height of the node
+ * 
+ * @param N The node whose height is to be calculated.
+ * 
+ * @return The height of the node.
+ */
 int height(Node *N)
 {
     if (N == NULL)
         return 0;
     return N->height;
 }
+/**
+ * It creates a new node with the given key and returns a pointer to the new node
+ * 
+ * @param key The key of the node.
+ * 
+ * @return A pointer to a node.
+ */
 Node *newNode(int key)
 {
     Node *a = new Node();
@@ -36,6 +50,13 @@ Node *rightRotate(Node *y)
     return x;
 }
 
+/**
+ * The leftRotate function is used to perform a left rotation on the given node
+ * 
+ * @param y The node that is being rotated.
+ * 
+ * @return The new root of the subtree.
+ */
 Node *leftRotate(Node *y)
 {
     Node *x = y->right;
@@ -55,6 +76,15 @@ int getBalance(Node *N)
     return height(N->left) - height(N->right);
 }
 
+/**
+ * If the key is less than the node's key, then we recurse left. If the key is greater, then we recurse
+ * right. Otherwise, we return the node
+ * 
+ * @param node The node to be inserted.
+ * @param key The key to be inserted into the tree.
+ * 
+ * @return The node that is being returned is the node that is being inserted.
+ */
 Node *insert(Node *node, int key)
 {
     if (node == NULL)
@@ -92,6 +122,12 @@ Node *insert(Node *node, int key)
     return node;
 }
 
+/**
+ * If the root is not null, print the root, then recursively call preOrder on the left and right
+ * subtrees
+ * 
+ * @param root The root of the tree
+ */
 void preOrder(Node *root)
 {
     if (root != NULL)
