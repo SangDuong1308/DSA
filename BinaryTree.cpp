@@ -245,6 +245,16 @@ int countLess(NODE *pRoot, int x)
     return count;
 }
 
+/**
+ * If the current node is greater than the given value, then add 1 to the count and recursively call
+ * the function on the left and right subtrees. Otherwise, recursively call the function on the right
+ * subtree
+ * 
+ * @param pRoot pointer to the root of the tree
+ * @param x the value to compare against
+ * 
+ * @return The number of nodes in the tree that are greater than x.
+ */
 int countGreater(NODE *pRoot, int x)
 {
     int count = 0;
@@ -270,6 +280,16 @@ int isBST(NODE *pRoot)
     return (isBSTUtil(pRoot, INT_MIN, INT_MAX));
 }
 
+/**
+ * If the tree is a BST, then the value of every node in the left subtree is less than the value of the
+ * current node, which is less than the value of every node in the right subtree
+ * 
+ * @param pRoot The root of the tree
+ * @param min minimum value of the key in the subtree rooted at pRoot
+ * @param max The maximum value a node can have.
+ * 
+ * @return The function isBSTUtil() returns 1 if the given tree is a BST, otherwise returns 0.
+ */
 int isBSTUtil(NODE *pRoot, int min, int max)
 {
     if (pRoot == NULL)
@@ -279,6 +299,16 @@ int isBSTUtil(NODE *pRoot, int min, int max)
     return (isBSTUtil(pRoot->left, min, pRoot->key - 1) && isBSTUtil(pRoot->right, pRoot->key + 1, max));
 }
 
+/**
+ * If the root is NULL, it's a full binary tree. If the root has no children, it's a full binary tree.
+ * If the root has two children, it's a full binary tree if both of its children are full binary trees.
+ * Otherwise, it's not a full binary tree
+ * 
+ * @param pRoot The root of the tree
+ * 
+ * @return The function isFullBST() returns true if the given binary tree is full and false if it is
+ * not.
+ */
 bool isFullBST(NODE *pRoot)
 {
     if (pRoot == NULL)
