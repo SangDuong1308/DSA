@@ -10,6 +10,13 @@ using namespace std;
     txt -> text
     q -> A prime number
 */
+/**
+ * The function search() prints all occurrences of pat in txt
+ * 
+ * @param pat The pattern we're searching for
+ * @param txt The text string to search in.
+ * @param q A prime number
+ */
 void search(string pat, string txt, int q)
 {
     int M = pat.length();
